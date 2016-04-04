@@ -99,6 +99,8 @@ public class ClientConnections extends ListActivity  {
       }
     }
 
+    startService(new Intent(this, GpsService.class));
+
   }
 
   /**

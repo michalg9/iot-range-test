@@ -120,6 +120,7 @@ public class MqttCallbackHandler implements MqttCallback {
 
 
     String message = "test location";
+    message = GpsService.getLatLong();
 
     int qos = ActivityConstants.defaultQos;
 
