@@ -47,7 +47,7 @@ import java.util.Map;
  * displays all the active connections.
  * 
  */
-public class ClientConnections extends ListActivity {
+public class ClientConnections extends ListActivity  {
 
   /**
    * Token to pass to the MQTT Service

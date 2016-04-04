@@ -14,11 +14,14 @@ package org.eclipse.paho.android.service.sample;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 
 import org.eclipse.paho.android.service.sample.Connection.ConnectionStatus;
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
 import org.eclipse.paho.client.mqttv3.MqttCallback;
+import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
+import org.eclipse.paho.client.mqttv3.MqttSecurityException;
 
 /**
  * Handles call backs from the MQTT Client
@@ -87,6 +90,8 @@ public class MqttCallbackHandler implements MqttCallback {
     //get the string from strings.xml and format
     String messageString = context.getString(R.string.messageRecieved, (Object[]) args);
 
+    publishLocation();
+
     //create intent to start activity
     Intent intent = new Intent();
     intent.setClassName(context, "org.eclipse.paho.android.service.sample.ConnectionDetails");
@@ -99,12 +104,43 @@ public class MqttCallbackHandler implements MqttCallback {
     notifyArgs[2] = topic;
 
     //notify the user 
-    Notify.notifcation(context, context.getString(R.string.notification, notifyArgs), intent, R.string.notifyTitle);
+    //Notify.notifcation(context, context.getString(R.string.notification, notifyArgs), intent, R.string.notifyTitle);
 
     //update client history
     c.addAction(messageString);
 
   }
+
+  /**
+   * Publish the message the user has specified
+   */
+  private void publishLocation()
+  {
+    String topic = "phone/location";
+
+
+    String message = "test location";
+
+    int qos = ActivityConstants.defaultQos;
+
+    boolean retained = false;
+
+    String[] args = new String[2];
+    args[0] = message;
+    args[1] = topic+";qos:"+qos+";retained:"+retained;
+
+    try {
+      Connections.getInstance(context).getConnection(clientHandle).getClient()
+              .publish(topic, message.getBytes(), qos, retained, null, new ActionListener(context, ActionListener.Action.PUBLISH, clientHandle, args));
+    }
+    catch (MqttSecurityException e) {
+      Log.e(this.getClass().getCanonicalName(), "Failed to publish a messged from the client with the handle " + clientHandle, e);
+    }
+    catch (MqttException e) {
+      Log.e(this.getClass().getCanonicalName(), "Failed to publish a messged from the client with the handle " + clientHandle, e);
+    }
+
+    }
 
   /**
    * @see org.eclipse.paho.client.mqttv3.MqttCallback#deliveryComplete(org.eclipse.paho.client.mqttv3.IMqttDeliveryToken)

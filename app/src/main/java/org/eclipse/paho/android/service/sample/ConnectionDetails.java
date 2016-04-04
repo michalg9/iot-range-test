@@ -264,6 +264,7 @@ public class ConnectionDetails extends FragmentActivity implements
       fragments.add(fragment);
       fragments.add(new SubscribeFragment());
       fragments.add(new PublishFragment());
+      //fragments.add(new IconGeneratorDemoActivity());
 
     }
 
@@ -296,6 +297,8 @@ public class ConnectionDetails extends FragmentActivity implements
           return getString(R.string.subscribe).toUpperCase();
         case 2 :
           return getString(R.string.publish).toUpperCase();
+        case 3 :
+          return getString(R.string.map).toUpperCase();
       }
       // return null if there is no title matching the position
       return null;
