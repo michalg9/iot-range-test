@@ -21,6 +21,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.Menu;
+import android.widget.EditText;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -118,6 +119,7 @@ public class ConnectionDetails extends FragmentActivity implements
     connection = Connections.getInstance(this).getConnection(clientHandle);
     changeListener = new ChangeListener();
     connection.registerChangeListener(changeListener);
+
   }
 
   @Override
@@ -133,6 +135,7 @@ public class ConnectionDetails extends FragmentActivity implements
   public boolean onCreateOptionsMenu(Menu menu) {
     int menuID;
     Integer button = null;
+    Integer buttonUnsub = null;
     boolean connected = Connections.getInstance(this)
         .getConnection(clientHandle).isConnected();
 
@@ -147,6 +150,7 @@ public class ConnectionDetails extends FragmentActivity implements
         case 1 : // subscribe view
           menuID = R.menu.activity_subscribe;
           button = R.id.subscribe;
+          buttonUnsub = R.id.unsubscribe;
           break;
         case 2 : // publish view
           menuID = R.menu.activity_publish;
@@ -165,6 +169,7 @@ public class ConnectionDetails extends FragmentActivity implements
         case 1 : // subscribe view
           menuID = R.menu.activity_subscribe_disconnected;
           button = R.id.subscribe;
+          buttonUnsub = R.id.unsubscribe;
           break;
         case 2 : // publish view
           menuID = R.menu.activity_publish_disconnected;
@@ -185,6 +190,15 @@ public class ConnectionDetails extends FragmentActivity implements
       if (!Connections.getInstance(this).getConnection(clientHandle)
           .isConnected()) {
         menu.findItem(button).setEnabled(false);
+      }
+    }
+
+    if (buttonUnsub != null) {
+      // add listeners
+      menu.findItem(buttonUnsub).setOnMenuItemClickListener(listener);
+      if (!Connections.getInstance(this).getConnection(clientHandle)
+              .isConnected()) {
+        menu.findItem(buttonUnsub).setEnabled(false);
       }
     }
     // add the listener to the disconnect or connect menu option

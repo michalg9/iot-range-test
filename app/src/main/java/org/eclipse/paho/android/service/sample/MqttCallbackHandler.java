@@ -116,7 +116,7 @@ public class MqttCallbackHandler implements MqttCallback {
    */
   private void publishLocation()
   {
-    String topic = "phone/location";
+    String topic = context.getResources().getString(R.string.default_pub_topic);
 
 
     String message = "test location";

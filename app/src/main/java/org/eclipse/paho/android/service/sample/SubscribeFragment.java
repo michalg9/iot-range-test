@@ -17,6 +17,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 
 /**
  * Fragment for the subscribe pane for the client
@@ -31,7 +32,12 @@ public class SubscribeFragment extends Fragment {
   public View onCreateView(LayoutInflater inflater, ViewGroup container,
       Bundle savedInstanceState) {
 
-    return LayoutInflater.from(getActivity()).inflate(R.layout.activity_subscribe, null);
+    View view = LayoutInflater.from(getActivity()).inflate(R.layout.activity_subscribe, null);
+
+    EditText portEditText = (EditText) view.findViewById(R.id.topic);
+    portEditText.setText(R.string.default_sub_topic);
+
+    return view;
 
   }
 

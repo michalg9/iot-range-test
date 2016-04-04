@@ -56,6 +56,15 @@ public class NewConnection extends Activity {
     textView.setAdapter(adapter);
 
     //load auto compete options
+    EditText clientIdEditText = (EditText) findViewById(R.id.clientId);
+    clientIdEditText.setText(R.string.default_client_id);
+
+    EditText serverURIEditText = (EditText) findViewById(R.id.serverURI);
+    serverURIEditText.setText(R.string.default_client_address);
+
+    EditText portEditText = (EditText) findViewById(R.id.port);
+    portEditText.setText(R.string.default_client_port);
+
 
   }
 

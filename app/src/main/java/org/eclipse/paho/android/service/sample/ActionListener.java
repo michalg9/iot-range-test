@@ -38,6 +38,8 @@ class ActionListener implements IMqttActionListener {
     DISCONNECT,
     /** Subscribe Action **/
     SUBSCRIBE,
+    /** Unsubscribe Action **/
+    UNSUBSCRIBE,
     /** Publish Action **/
     PUBLISH
   }
@@ -93,6 +95,9 @@ class ActionListener implements IMqttActionListener {
       case SUBSCRIBE :
         subscribe();
         break;
+      case UNSUBSCRIBE :
+        unsubscribe();
+        break;
       case PUBLISH :
         publish();
         break;
@@ -123,6 +128,20 @@ class ActionListener implements IMqttActionListener {
     Connection c = Connections.getInstance(context).getConnection(clientHandle);
     String actionTaken = context.getString(R.string.toast_sub_success,
         (Object[]) additionalArgs);
+    c.addAction(actionTaken);
+    Notify.toast(context, actionTaken, Toast.LENGTH_SHORT);
+
+  }
+
+  /**
+   * An unsubscribe action has been successfully completed, update the connection
+   * object associated with the client this action belongs to and then notify
+   * the user of success
+   */
+  private void unsubscribe() {
+    Connection c = Connections.getInstance(context).getConnection(clientHandle);
+    String actionTaken = context.getString(R.string.toast_unsub_success,
+            (Object[]) additionalArgs);
     c.addAction(actionTaken);
     Notify.toast(context, actionTaken, Toast.LENGTH_SHORT);
 

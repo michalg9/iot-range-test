@@ -97,6 +97,9 @@ public class Listener implements OnMenuItemClickListener {
       case R.id.subscribe :
         subscribe();
         break;
+      case R.id.unsubscribe :
+        unsubscribe();
+        break;
       case R.id.newConnection :
         createAndConnect();
         break;
@@ -197,6 +200,44 @@ public class Listener implements OnMenuItemClickListener {
     }
     catch (MqttException e) {
       Log.e(this.getClass().getCanonicalName(), "Failed to subscribe to" + topic + " the client with the handle " + clientHandle, e);
+    }
+  }
+
+  /**
+   * Subscribe to a topic that the user has specified
+   */
+  private void unsubscribe()
+  {
+    String topic = ((EditText) connectionDetails.findViewById(R.id.topic)).getText().toString();
+    ((EditText) connectionDetails.findViewById(R.id.topic)).getText().clear();
+
+    RadioGroup radio = (RadioGroup) connectionDetails.findViewById(R.id.qosSubRadio);
+    int checked = radio.getCheckedRadioButtonId();
+    int qos = ActivityConstants.defaultQos;
+
+    switch (checked) {
+      case R.id.qos0 :
+        qos = 0;
+        break;
+      case R.id.qos1 :
+        qos = 1;
+        break;
+      case R.id.qos2 :
+        qos = 2;
+        break;
+    }
+
+    try {
+      String[] topics = new String[1];
+      topics[0] = topic;
+      Connections.getInstance(context).getConnection(clientHandle).getClient()
+              .unsubscribe(topic, context, new ActionListener(context, Action.UNSUBSCRIBE, clientHandle, topics));
+    }
+    catch (MqttSecurityException e) {
+      Log.e(this.getClass().getCanonicalName(), "Failed to unsubscribe to" + topic + " the client with the handle " + clientHandle, e);
+    }
+    catch (MqttException e) {
+      Log.e(this.getClass().getCanonicalName(), "Failed to unsubscribe to" + topic + " the client with the handle " + clientHandle, e);
     }
   }
 
